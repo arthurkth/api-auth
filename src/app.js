@@ -1,25 +1,27 @@
 import Fastify from "fastify";
-import DatabaseConnection from "./config/dbConnection.js";
-import config from "./config/config.js";
-const { database, username, password, configs } = config.development;
+import sequelize from "./config/dbConnection.js";
+
 class App {
-  #connection = new DatabaseConnection(database, username, password, configs);
-  constructor(port) {
+  fastify = Fastify({ logger: true });
+  constructor(port, database = {}) {
+    this.database = database || sequelize;
     this.PORT = port || 3000;
   }
 
-  start() {
-    const fastify = Fastify({
-      logger: true,
-    });
+  async start() {
+    try {
+      await sequelize.authenticate();
+      console.log("Connection has been established successfully.");
+    } catch (error) {
+      console.error("Unable to connect to the database:", error);
+      process.exit(1);
+    }
 
-    this.#connection.start;
+    this.fastify.register(import("./routes/index.js"));
 
-    fastify.register(import("./routes/index.js"));
-
-    fastify.listen({ port: this.PORT }, (err, address) => {
+    this.fastify.listen({ port: this.PORT }, (err, address) => {
       if (err) {
-        fastify.log.error(err);
+        this.fastify.log.error(err);
         process.exit(1);
       }
       console.log(`Server is now listening on ${address}`);

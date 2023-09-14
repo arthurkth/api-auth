@@ -1,9 +1,5 @@
 import { DataTypes } from "sequelize";
-import DatabaseConnection from "../config/dbConnection.js";
-import config from "../config/config.js";
-const { database, username, password, configs } = config.development;
-const sequelize = new DatabaseConnection(database, username, password, configs)
-  .sequelize;
+import sequelize from "../config/dbConnection.js";
 
 const User = sequelize.define("user", {
   id: {
@@ -12,6 +8,7 @@ const User = sequelize.define("user", {
   },
   email: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false,
   },
   password: {
@@ -19,5 +16,7 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
 });
+
+User.sync();
 
 export default User;
