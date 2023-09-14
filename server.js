@@ -4,4 +4,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 let app = new App(process.env.PORT);
-app.start();
+try {
+  app.start();
+} catch (error) {
+  console.log("Uncaught Error");
+  console.log(error);
+}

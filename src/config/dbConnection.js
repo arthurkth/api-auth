@@ -1,12 +1,10 @@
 import { Sequelize } from "sequelize";
-import config from "../../config.js";
 
 class DatabaseConnection {
-  constructor() {
-    const { database, username, password, configs } = config.development;
-
+  constructor(database, username, password, configs) {
     this.sequelize = new Sequelize(database, username, password, configs);
     this.start();
+    this.sequelize.sync();
   }
 
   async start() {
