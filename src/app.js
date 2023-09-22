@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import sequelize from "./config/dbConnection.js";
+import cors from "@fastify/cors";
 
 class App {
   fastify = Fastify({ logger: true });
@@ -17,7 +18,7 @@ class App {
       process.exit(1);
     }
 
-    this.fastify.register(import("./routes/index.js"));
+    await this.fastify.register(import("./routes/index.js")).register(cors);
 
     this.fastify.listen({ port: this.PORT }, (err, address) => {
       if (err) {

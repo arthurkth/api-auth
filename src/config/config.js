@@ -3,12 +3,12 @@ dotnev.config();
 
 export default {
   development: {
-    database: process.env.PG_DATABASE,
-    username: process.env.PG_USERNAME,
-    password: process.env.PG_PASSWORD,
+    database: process.env.DB_DATABASE,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
     configs: {
-      host: process.env.PG_HOST,
-      dialect: process.env.PG_DIALECT,
+      host: process.env.DB_HOST,
+      dialect: process.env.DB_DIALECT,
     },
   },
 };

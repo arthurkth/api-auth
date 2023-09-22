@@ -24,9 +24,32 @@ export default class UserController {
     }
   };
   update = async (request, reply) => {
-    reply.send("Update");
+    try {
+      if (!request.params.id) {
+        return reply.status(400).send({ error: "Informe um ID válido." });
+      }
+      await this.userService.update(request.params.id, request.body);
+      return reply
+        .status(200)
+        .send({ success: "Usuário atualizado com sucesso" });
+    } catch (error) {
+      return reply.status(500).send({ error: error.message });
+    }
   };
   delete = async (request, reply) => {
-    reply.send("Delete");
+    try {
+      if (!request.params.id) {
+        return reply.status(400).send({ error: "Informe um ID válido." });
+      }
+      await this.userService.remove(request.params.id);
+    } catch (error) {
+      return reply.status(500).send({ error: error.message });
+    }
+  };
+
+  authRouteExample = async (request, reply) => {
+    return reply
+      .status(200)
+      .send({ auth: true, message: "You can access this route!" });
   };
 }

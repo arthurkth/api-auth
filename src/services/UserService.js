@@ -42,10 +42,33 @@ export default class UserService {
     });
   };
 
-  setToken(payload) {
+  update = async (id, { email, password }) => {
+    if (password) {
+      password = await argon2.hash(password);
+    }
+    await this.userRepository.update({ id, email, password });
+  };
+
+  remove = async (id) => {
+    await this.userRepository.remove(id);
+  };
+
+  setToken = (payload) => {
     return jwt.sign({ userId: payload }, process.env.JWT_PRIVATE_KEY, {
       algorithm: "HS256",
       expiresIn: 600,
     });
-  }
+  };
+
+  verifyToken = (token) => {
+    return jwt.verify(
+      token,
+      process.env.JWT_PRIVATE_KEY,
+      function (err, decoded) {
+        if (err) {
+          return false;
+        }
+      },
+    );
+  };
 }

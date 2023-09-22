@@ -1,4 +1,5 @@
 import UserController from "../controllers/UserController.js";
+import auth from "../middlewares/AuthMiddleware.js";
 
 const userController = new UserController();
 
@@ -13,6 +14,11 @@ const routes = (fastify, opts, done) => {
 
   fastify.delete("/delete/:id", userController.delete);
 
+  fastify.get(
+    "/auth-route-example",
+    { preHandler: auth },
+    userController.authRouteExample,
+  );
   done();
 };
 
